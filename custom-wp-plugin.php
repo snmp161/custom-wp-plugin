@@ -75,6 +75,20 @@ function my_profile_url( $edit_profile_url, $redirect ) {
 add_filter( 'the_author', '__return_false' );
 add_filter( 'get_the_author', '__return_false' );
 add_filter( 'author_link', '__return_false' );
+
+$css .= ".entry-meta .byline:before,
+	.entry-header .entry-meta span.byline:before,
+	.entry-meta .byline:after,
+	.entry-header .entry-meta span.byline:after,
+	.single .byline, .group-blog .byline,
+	.entry-meta .byline,
+	.entry-header .entry-meta > span.byline,
+	.entry-meta .author.vcard  {
+		content: '';
+		display: none;
+		margin: 0;
+	}\n";
+
 add_filter( 'the_date', '__return_false' );
 add_filter( 'the_time', '__return_false' );
 add_filter( 'the_modified_date', '__return_false' );
@@ -82,5 +96,16 @@ add_filter( 'get_the_date', '__return_false' );
 add_filter( 'get_the_title', '__return_false' );
 add_filter( 'get_the_time', '__return_false' );
 add_filter( 'get_the_modified_date', '__return_false' );
+
+$css .= ".entry-meta .posted-on:before,
+	.entry-header .entry-meta > span.posted-on:before,
+	.entry-meta .posted-on:after,
+	.entry-header .entry-meta > span.posted-on:after,
+	.entry-meta .posted-on,
+	.entry-header .entry-meta > span.posted-on {
+		content: '';
+		display: none;
+		margin: 0;
+	}\n";
 
 ?>
