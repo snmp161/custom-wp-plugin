@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Kubasovo Custom Plugin
  * Description: Небольшие кастомные доработки
@@ -38,20 +39,17 @@ add_filter( 'logout_url', 'my_logout_page', 10, 2 );
 function my_logout_page( $logout_url, $redirect ) {
     return str_replace("wp-login.php","logout",$logout_url);
 }
-
 /*
 add_filter( 'edit_profile_url', 'my_edit_profile_url', 10, 2 );
 function my_edit_profile_url( $edit_profile_url, $redirect ) {
     return str_replace("wp-login.php","account",$edit_profile_url);
 }
-*/
-/*
+
 add_filter( 'get_edit_profile_url', 'my_edit_profile_url', 10, 2 );
 function my_edit_profile_url( $edit_profile_url, $redirect ) {
     return str_replace("wp-login.php","account",$edit_profile_url);
 }
 */
-
 add_filter( 'get_edit_profile_url', 'my_edit_profile_url', 10, 2 );
 function my_edit_profile_url( $user_id = 0, $scheme = 'admin' ) {
     $user_id = $user_id ? (int) $user_id : get_current_user_id();
