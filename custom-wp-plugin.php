@@ -106,4 +106,40 @@ $css .= ".entry-meta .posted-on:before,
 		margin: 0;
 	}\n";
 
+function kubasovo_is_email_domain_allowed( $email ) {
+	$allowed_tlds = array( 'ru', 'su', 'рф', 'xn--p1ai' ); // xn--p1ai = .рф в punycode
+
+	$at_pos = strrpos( $email, '@' );
+	if ( false === $at_pos ) {
+		return false;
+	}
+
+	$domain = mb_strtolower( substr( $email, $at_pos + 1 ) );
+	$parts  = explode( '.', $domain );
+	$tld    = end( $parts );
+
+	return in_array( $tld, $allowed_tlds, true );
+}
+
+add_filter( 'registration_errors', 'kubasovo_email_check_register', 10, 3 );
+function kubasovo_email_check_register( $errors, $sanitized_user_login, $user_email ) {
+	if ( ! kubasovo_is_email_domain_allowed( $user_email ) ) {
+		$errors->add(
+			'email_domain_denied',
+			'Регистрация возможна только с email в зонах .ru, .su, .рф'
+		);
+	}
+	return $errors;
+}
+
+add_action( 'user_profile_update_errors', 'kubasovo_email_check_update', 10, 3 );
+function kubasovo_email_check_update( $errors, $update, $user ) {
+	if ( $update && ! empty( $user->user_email ) && ! kubasovo_is_email_domain_allowed( $user->user_email ) ) {
+		$errors->add(
+			'email_domain_denied',
+			'Разрешены только email в зонах .ru, .su, .рф'
+		);
+	}
+}
+
 ?>
