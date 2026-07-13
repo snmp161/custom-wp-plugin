@@ -6,7 +6,7 @@
  * Plugin URI:  https://github.com/snmp161/custom-wp-plugin.git
  * Author URI:  https://github.com/snmp161
  * Author:      Sergei Ovchinnikov
- * Version:     0.1
+ * Version:     0.3
  *
  * Text Domain: ID перевода, указывается в load_plugin_textdomain()
  * Domain Path: Путь до файла перевода.
@@ -139,6 +139,20 @@ function kubasovo_email_check_update( $errors, $update, $user ) {
 			'email_domain_denied',
 			'Разрешены только email в зонах .ru, .su, .рф'
 		);
+	}
+}
+
+add_action( 'personal_options_update', 'kubasovo_block_email_confirmation', 1 );
+function kubasovo_block_email_confirmation( $user_id ) {
+	if ( empty( $_POST['email'] ) ) {
+		return;
+	}
+
+	$new_email = trim( wp_unslash( $_POST['email'] ) );
+	$user      = get_userdata( $user_id );
+
+	if ( $user && $new_email !== $user->user_email && ! kubasovo_is_email_domain_allowed( $new_email ) ) {
+		remove_action( 'personal_options_update', 'send_confirmation_on_profile_email' );
 	}
 }
 
