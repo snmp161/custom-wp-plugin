@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: Kubasovo Custom Plugin
  * Description: Небольшие кастомные доработки
@@ -24,12 +23,15 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-/*
-add_filter( 'register_url', 'my_register_page', 10, 2 );
-function my_register_page( $register_url, $redirect ) {
-    return str_replace("wp-login.php","register",$register_url);
+
+add_filter( 'register_url', 'change_my_register_url' );
+function change_my_register_url( $url ) {
+    if( is_admin() ) {
+    	return $url;
+    }
+    return "/register/";
 }
-*/
+
 add_filter( 'login_url', 'my_login_page', 10, 2 );
 function my_login_page( $login_url, $redirect ) {
     return str_replace("wp-login.php","login",$login_url);
@@ -39,17 +41,20 @@ add_filter( 'logout_url', 'my_logout_page', 10, 2 );
 function my_logout_page( $logout_url, $redirect ) {
     return str_replace("wp-login.php","logout",$logout_url);
 }
+
 /*
 add_filter( 'edit_profile_url', 'my_edit_profile_url', 10, 2 );
 function my_edit_profile_url( $edit_profile_url, $redirect ) {
     return str_replace("wp-login.php","account",$edit_profile_url);
 }
-
+*/
+/*
 add_filter( 'get_edit_profile_url', 'my_edit_profile_url', 10, 2 );
 function my_edit_profile_url( $edit_profile_url, $redirect ) {
     return str_replace("wp-login.php","account",$edit_profile_url);
 }
 */
+
 add_filter( 'get_edit_profile_url', 'my_edit_profile_url', 10, 2 );
 function my_edit_profile_url( $user_id = 0, $scheme = 'admin' ) {
     $user_id = $user_id ? (int) $user_id : get_current_user_id();
@@ -155,5 +160,6 @@ function kubasovo_block_email_confirmation( $user_id ) {
 		remove_action( 'personal_options_update', 'send_confirmation_on_profile_email' );
 	}
 }
+
 
 ?>
